@@ -20,5 +20,5 @@ interface ExpenseDao {
         WHERE es.userId = :userId
     """,
     )
-    suspend fun getExpenseSHaredWithUser(userId: String): List<Expense>
+    suspend fun getExpenseSharedWithUser(userId: String): List<Expense>
 }
