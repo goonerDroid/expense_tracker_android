@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.sublime.myexpensetracker.data.models.Expense
 import com.sublime.myexpensetracker.data.models.ExpenseSplit
 import com.sublime.myexpensetracker.data.models.ExpenseWithSplits
+import com.sublime.myexpensetracker.data.models.User
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -103,13 +104,13 @@ fun ExpenseCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             // List of splits
-            Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-            ) {
-                expenseWithSplits.splits.forEach { split ->
-                    SplitItem(split = split)
-                }
-            }
+//            Column(
+//                verticalArrangement = Arrangement.spacedBy(4.dp),
+//            ) {
+//                expenseWithSplits.splits.forEach { split ->
+//                    SplitItem(split = split)
+//                }
+//            }
         }
     }
 }
@@ -117,8 +118,11 @@ fun ExpenseCard(
 @Composable
 private fun SplitItem(
     split: ExpenseSplit,
+    users: List<User>, // Add users parameter
     modifier: Modifier = Modifier,
 ) {
+    val userName = users.find { it.userId == split.userId }?.name ?: "Unknown User"
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -128,7 +132,6 @@ private fun SplitItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(1f),
         ) {
-            // Status indicator
             Box(
                 modifier =
                     Modifier
@@ -147,7 +150,7 @@ private fun SplitItem(
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = split.userId, // You might want to show user name instead
+                text = userName, // Show user name instead of ID
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )
@@ -161,13 +164,11 @@ private fun SplitItem(
     }
 }
 
-// Utility function to format timestamp
 private fun formatDate(timestamp: Long): String {
     val dateFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
     return dateFormat.format(Date(timestamp))
 }
 
-// Preview
 @Preview(showBackground = true)
 @Composable
 fun ExpenseCardPreview() {

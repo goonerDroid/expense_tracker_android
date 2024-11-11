@@ -1,5 +1,6 @@
 package com.sublime.myexpensetracker.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +35,11 @@ fun UserSelectionScreen(
     var newUserName by remember { mutableStateOf("") }
     val users by viewModel.users.collectAsState()
 
+    // Add LaunchedEffect to load users when screen is created
+    LaunchedEffect(Unit) {
+        viewModel.loadUsers()
+    }
+
     Column(
         modifier =
             Modifier
@@ -42,15 +49,18 @@ fun UserSelectionScreen(
         Text(
             text = "Select or create user",
             style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 24.dp),
         )
 
+        // Show existing users
         LazyColumn(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(users) { user ->
                 UserCard(
                     user = user,
-                    onClick = { onUserSelected(user) }
+                    onClick = { onUserSelected(user) },
                 )
             }
         }

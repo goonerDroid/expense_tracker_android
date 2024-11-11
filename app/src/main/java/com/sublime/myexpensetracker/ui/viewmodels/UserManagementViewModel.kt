@@ -23,6 +23,17 @@ class UserManagementViewModel
         private val _currentUser = MutableStateFlow<User?>(null)
         val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
 
+        init {
+            // Load users when ViewModel is created
+            loadUsers()
+        }
+
+        fun loadUsers() {
+            viewModelScope.launch {
+                _users.value = expenseRepository.getAllUsers()
+            }
+        }
+
         fun createUser(name: String) {
             viewModelScope.launch {
                 val newUser = expenseRepository.createUser(name)

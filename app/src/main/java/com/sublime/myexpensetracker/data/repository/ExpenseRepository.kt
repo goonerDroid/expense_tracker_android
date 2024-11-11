@@ -57,8 +57,6 @@ class ExpenseRepository
                 }
             }
 
-        suspend fun getAllUsers(): List<User> = userDao.getAllUsers()
-
         suspend fun createUser(name: String): User {
             val user =
                 User(
